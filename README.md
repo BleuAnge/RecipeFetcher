@@ -1,6 +1,8 @@
 # recipe_fetcher
 
-A new Flutter project.
+A Mobile App That Fetches Recipe From An Api
+
+This App is created to Demonstrate My Ability to Fetch Data From An Api And Display Them In The App
 
 ## Getting Started
 
