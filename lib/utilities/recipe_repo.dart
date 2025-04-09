@@ -69,13 +69,18 @@ class RecipeRepository {
 
   Future<List<Map<String, Map<String, dynamic>>>> getSearch({
     required SearchType type,
-    required String value
+    required String value,
+    bool limited = false
   }) async {
-    final String route = switch (type) {
+    String route = switch (type) {
       SearchType.CATEGORIES => "/filter.php?c=$value",
       SearchType.AREAS => "/filter.php?a=$value",
       SearchType.INGREDIENTS => "/filter.php?i=$value"
     };
+
+    if (limited) {
+      route += "&limit=5";
+    }
 
     final response = await http.get(Uri.parse("$api$route"));
 
@@ -96,9 +101,9 @@ class RecipeRepository {
   }
 
   Future<RecipeModel> getRecipe({
-    required String id
+    required String id,
   }) async {
-    final String route = "$api/lookup.php?i=$id";
+    String route = "$api/lookup.php?i=$id";
 
     final response = await http.get(Uri.parse(route));
 

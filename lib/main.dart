@@ -33,17 +33,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      debugShowCheckedModeBanner: false,
-      home: RepositoryProvider<RecipeRepository>(
-        create: (context) => RecipeRepository(),
-        child: BlocProvider<RecipeSearchCubit>(
-          create: (context) => RecipeSearchCubit(),
-          child: RecipeSearchController()
+    return RepositoryProvider<RecipeRepository>(
+      create: (context) => RecipeRepository(),
+      child: MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        ),
+        debugShowCheckedModeBanner: false,
+        home: Scaffold(
+          body: BlocProvider<RecipeSearchCubit>(
+            create: (context) => RecipeSearchCubit(),
+            child: RecipeSearchController()
+          ),
         ),
       ),
     );

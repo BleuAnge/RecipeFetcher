@@ -31,62 +31,80 @@ class RecipeSearchLoadedPage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.amber,
+          backgroundColor: Colors.white,
           centerTitle: true,
           title: Text("Recipe Search"),
           bottom: PreferredSize(
-            preferredSize: Size(MediaQuery.sizeOf(context).width, 64), 
+            preferredSize: Size(MediaQuery.sizeOf(context).width, 48), 
             child: Container(
-              color: Colors.red,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  DropdownButton<SearchType>(
-                    value: searchType,
-                    onChanged: (value) {
-                      context.read<RecipeSearchCubit>().changeSearchType(value!);
-                    },
-                    items: SearchType.values.map(
-                      (item) {
-                        return DropdownMenuItem(
-                          value: item, 
-                          child: Text(
-                            item.name
-                          )
-                        );
-                      }
-                    ).toList(),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Colors.black,
+                    width: 1
                   ),
-                  DropdownButton<String>(
-                    value: switch (searchType) {
-                      SearchType.CATEGORIES => selectedCategory,
-                      SearchType.AREAS => selectedArea,
-                      SearchType.INGREDIENTS => selectedIngredient
-                    },
-                    onChanged: (value) {
-                      context.read<RecipeSearchCubit>().changeFilter(
-                        context,
-                        category: searchType == SearchType.CATEGORIES ? value : null,
-                        area: searchType == SearchType.AREAS ? value : null,
-                        ingredient: searchType == SearchType.INGREDIENTS ? value : null,
-                      );
-                    },
-                    items: switch (searchType) {
-                      SearchType.CATEGORIES => categories,
-                      SearchType.AREAS => areas,
-                      SearchType.INGREDIENTS => ingredients
-                    }.map(
-                      (item) {
-                        return DropdownMenuItem(
-                          value: item, 
-                          child: Text(
-                            item
-                          )
-                        );
-                      }
-                    ).toList(), 
+                  bottom: BorderSide(
+                    color: Colors.black,
+                    width: 1
                   )
-                ],
+                )
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    DropdownButton<SearchType>(
+                      dropdownColor: Colors.white,
+                      value: searchType,
+                      onChanged: (value) {
+                        context.read<RecipeSearchCubit>().changeSearchType(value!);
+                      },
+                      alignment: Alignment.bottomRight,
+                      items: SearchType.values.map(
+                        (item) {
+                          return DropdownMenuItem(
+                            value: item, 
+                            child: Text(
+                              item.name
+                            )
+                          );
+                        }
+                      ).toList(),
+                    ),
+                    DropdownButton<String>(
+                      value: switch (searchType) {
+                        SearchType.CATEGORIES => selectedCategory,
+                        SearchType.AREAS => selectedArea,
+                        SearchType.INGREDIENTS => selectedIngredient
+                      },
+                      onChanged: (value) {
+                        context.read<RecipeSearchCubit>().changeFilter(
+                          context,
+                          category: searchType == SearchType.CATEGORIES ? value : null,
+                          area: searchType == SearchType.AREAS ? value : null,
+                          ingredient: searchType == SearchType.INGREDIENTS ? value : null,
+                        );
+                      },
+                      items: switch (searchType) {
+                        SearchType.CATEGORIES => categories,
+                        SearchType.AREAS => areas,
+                        SearchType.INGREDIENTS => ingredients
+                      }.map(
+                        (item) {
+                          return DropdownMenuItem(
+                            value: item, 
+                            child: Text(
+                              item
+                            )
+                          );
+                        }
+                      ).toList(), 
+                    )
+                  ],
+                ),
               ),
             )
           ),
@@ -119,6 +137,31 @@ class RecipeSearchLoadedPage extends StatelessWidget {
                 )
               )
           ],
+        ),
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            context.read<RecipeSearchCubit>().getRandomRecipe(context);
+          },
+          child: Container(
+            width: 64,
+            height: 64,
+            decoration: BoxDecoration(
+              color: Colors.blueAccent,
+              border: Border.all(
+                color: Colors.blue,
+                width: 1
+              ),
+              borderRadius: BorderRadius.circular(50)
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(
+                Icons.question_mark,
+                color: Colors.white,
+                size: 48,
+              ),
+            ),
+          ),
         ),
       ),
     );

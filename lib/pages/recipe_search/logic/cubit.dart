@@ -3,7 +3,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:recipe_fetcher/pages/recipe_view/test.dart';
+import 'package:recipe_fetcher/pages/recipe_view/main.dart';
 import 'package:recipe_fetcher/utilities/enum.dart';
 import 'package:recipe_fetcher/utilities/recipe_model.dart';
 import 'package:recipe_fetcher/utilities/recipe_repo.dart';
@@ -19,17 +19,22 @@ class RecipeSearchCubit extends Cubit<RecipeSearchState> {
     final result = await Future.wait([
       context.read<RecipeRepository>().getCategories(),
       context.read<RecipeRepository>().getAreas(),
-      context.read<RecipeRepository>().getIngredients()
+      context.read<RecipeRepository>().getIngredients(),
+      context.read<RecipeRepository>().getSearch(
+        type: SearchType.CATEGORIES, 
+        value: "beef"
+      )
     ]);
 
     emit(
       RecipeSearchLoadedState(
-        categories: result[0],
-        areas: result[1], 
-        ingredients: result[2],
-        selectedCategory: result[0][0],
-        selectedArea: result[1][0],
-        selectedIngredient: result[2][0],
+        categories: result[0] as List<String>,
+        areas: result[1] as List<String>, 
+        ingredients: result[2] as List<String>,
+        selectedCategory: result[0][0] as String,
+        selectedArea: result[1][0] as String,
+        selectedIngredient: result[2][0] as String,
+        recipes: result[3] as List<Map<String, Map<String, dynamic>>>
       )
     );
   }
@@ -63,6 +68,24 @@ class RecipeSearchCubit extends Cubit<RecipeSearchState> {
         selectedIngredient: ingredient,
         recipes: recipes
       )
+    );
+  }
+
+  void getRandomRecipe(BuildContext context) async {
+    final RecipeModel recipe = await context.read<RecipeRepository>().getRandomRecipe();
+
+    Future.delayed(
+      Duration.zero,
+      () {
+        Navigator.push(
+          context, 
+          MaterialPageRoute(
+            builder: (context) => RecipeView(
+              recipe: recipe,
+            )
+          )
+        );
+      }
     );
   }
 

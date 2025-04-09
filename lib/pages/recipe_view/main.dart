@@ -1,6 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recipe_fetcher/component/similar_recipe_modal.dart';
+import 'package:recipe_fetcher/utilities/enum.dart';
 import 'package:recipe_fetcher/utilities/recipe_model.dart';
+import 'package:recipe_fetcher/utilities/recipe_repo.dart';
 
 class RecipeView extends StatelessWidget {
   final RecipeModel recipe;
@@ -47,8 +53,27 @@ class RecipeView extends StatelessWidget {
                               )
                             ),
                             GestureDetector(
-                              onTap: () {
-                                
+                              onTap: () async {
+                                final List<Map<String, Map<String, dynamic>>> recipes = await context
+                                  .read<RecipeRepository>().getSearch(
+                                    type: SearchType.CATEGORIES, 
+                                    value: recipe.category,
+                                  );
+
+                                Future.delayed(
+                                  Duration.zero,
+                                  () {
+                                    showModalBottomSheet(
+                                      useRootNavigator: false,
+                                      context: context, 
+                                      builder: (context) {
+                                        return SimilarRecipeModal(
+                                          recipes: recipes
+                                        );
+                                      }
+                                    );
+                                  }
+                                );
                               },
                               child: Text(
                                 recipe.category,
@@ -73,8 +98,27 @@ class RecipeView extends StatelessWidget {
                               )
                             ),
                             GestureDetector(
-                              onTap: () {
-                                
+                              onTap: () async {
+                                final List<Map<String, Map<String, dynamic>>> recipes = await context
+                                  .read<RecipeRepository>().getSearch(
+                                    type: SearchType.AREAS, 
+                                    value: recipe.area,
+                                  );
+
+                                Future.delayed(
+                                  Duration.zero,
+                                  () {
+                                    showModalBottomSheet(
+                                      useRootNavigator: false,
+                                      context: context, 
+                                      builder: (context) {
+                                        return SimilarRecipeModal(
+                                          recipes: recipes
+                                        );
+                                      }
+                                    );
+                                  }
+                                );
                               },
                               child: Text(
                                 recipe.area,
@@ -107,19 +151,14 @@ class RecipeView extends StatelessWidget {
                           spacing: 4,
                           children: recipe.tags.map(
                             (tag) {
-                              return GestureDetector(
-                                onTap: () {
-
-                                },
-                                child: Text(
-                                  tag,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.w500,
-                                    decoration: TextDecoration.underline,
-                                    decorationColor: Colors.blue
-                                  ),
+                              return Text(
+                                tag,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.w500,
+                                  decoration: TextDecoration.underline,
+                                  decorationColor: Colors.blue
                                 ),
                               );
                             }

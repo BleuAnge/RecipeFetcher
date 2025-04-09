@@ -28,12 +28,19 @@ class RecipeTile extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: recipe['thumbnail'],
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
-                ),
+                child: switch (recipe["thumbnail"]!= null) {
+                  true => CachedNetworkImage(
+                    imageUrl: recipe['thumbnail'],
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                  false => Placeholder(
+                    color: Colors.grey,
+                    fallbackHeight: 100,
+                    fallbackWidth: 100
+                  )
+                }
               )
             ),
             Expanded(
