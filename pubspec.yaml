@@ -15,6 +15,7 @@ dependencies:
   http:
   shared_preferences:
   intl:
+  cached_network_image:
 
   cupertino_icons: ^1.0.8
 
